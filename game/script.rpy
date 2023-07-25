@@ -13,8 +13,6 @@
 
 define e = Character("Eunie")
 
-# The game starts here.
-
 label start:
     "All that matters in a performance... is how it ends."
 
