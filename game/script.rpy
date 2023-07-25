@@ -11,58 +11,56 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character. this is a final statement
 
-define e = Character("Eunie")
+define e = Character("Jamie")
 
 label start:
-    "All that matters in a performance... is how it ends."
+    # slow scroll after elipse
+    "All that matters in a performance"
+    extend "...is how it ends."
+    # pause for a little bit
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
+    # fade in
+    scene bg cliff_bad
 
-    scene bg cafe
+    # "Eunie and Jamie are sitting outdoors, Jamie finishes playing a tune on his Melodica. Eunie starts clapping as Jamie looks away slightly embarrassed. "
 
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-
-    "You see an empty cafe with a peculiar looking man"
-    "Oh no he's walking towards you"
-
-    menu:
-        "Run away and hide":
-            jump ran_away
-        "Stand still and hope he doesnt see you":
-            show eunie neutral
-
-    "Random Guy?" "Oh my God hi! Fancy seeing you here"
-    "...You've never seen this guy before in your life. At least you dont think so?"
-
-    show eunie opening
-
-    "Random Guy?" "sooooo... hows the fit?"
-
-    $ mean = False
-
-    menu:
-        "SLAYYY its serving cunt":
-            show eunie happy
-            "Random Guy?" "i knew youd like it hunty"
-        "...ew":
-            show eunie angry
-            "Random Guy?" "ur a piece of shit"
-            $ mean = True
-            "Eugh whatever who even is this guy"
-            return
-        "uhhhh who are you again?":
-            show eunie neutral
-
-# labels are just points you can jump to
-label introduce:
     show eunie neutral
-    e "Oh where are my manners im Eunie!"
-    return
+    "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
 
-label ran_away:
-    scene bg cafeteria
-    "Ok you lost him. At least you think so?"
+    "Jamie" "Jamming Society?"
+
+    "Jamie" "...What does making jam have to do with music?"
+
+    show eunie angry
+    "Eunie" "{size=*0.75} Not actual jam you idiot." 
+    show eunie happy:
+        yoffset 0
+        easein 0.30 yoffset -75
+        easeout 0.25 yoffset 0
+    "Eunie" "Musical jamming! Playing with people."
+
+    show eunie neutral
+    "Jamie" "Ohhhhhhh"
+    "Jamie" "That makes more sense." 
+
+    "Eunie" "Seriously though, I think you'd enjoy it."
+
+    "Jamie" "But I don't think I'm that a great player... you really think I'd be able to jam with other people?"
+
+    show eunie blush
+    "Eunie" "What kind dumb question is that? Jamming's for everyone!"
+    show eunie neutral
+
+    "Jamie" "Maybe I should practice for a few months before I play with you guys. I mean I think everyone there is incredible professional musicians and I'm just messing around with thing. I think I'll just mess up and ruin it for everyone else. Imagine what they sa{nw}"
+
+    "Eunie" "It doesn't matter whether you're a beginner or pro, {nw}"
+    show eunie happy
+    extend "our jamming welcomes everyone!"
+
+    "{size=*0.75}It's embarrassing to be {i}this{/i} new though"
+
+    # have a different happy pose, happy 1 and happy 2 for variety
+    "Eunie" "And playing with other people- it's a really different experience"
+    "Eunie" "I can promise you its worth going, at least just once to try it out"
+    "Jamie" "Ok... If you say so."
+    "I mean... Whats the worst that can happen?"
