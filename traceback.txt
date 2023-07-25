@@ -1,0 +1,22 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 56, in script
+    jump rude_introduction
+ScriptError: could not find label 'rude_introduction'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 56, in script
+    jump rude_introduction
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\ast.py", line 1992, in execute
+    rv = renpy.game.script.lookup(target)
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\script.py", line 1013, in lookup
+    raise ScriptError("could not find label '%s'." % str(original))
+ScriptError: could not find label 'rude_introduction'.
+
+Windows-10-10.0.19045 AMD64
+Ren'Py 8.1.1.23060707
+UniJam: The Murder Mystery 1.0
+Tue Jul 25 20:07:46 2023
