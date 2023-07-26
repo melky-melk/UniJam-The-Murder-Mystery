@@ -33,8 +33,8 @@ init python:
             # The speed of the computer.
             self.computerspeed = 380.0
 
-            # The position, delta-position, and the speed of the
-            # ball.
+            # The position, delta-position, and the speed of the ball.
+            # b standing for ball
             self.bx = self.PADDLE_X + self.PADDLE_WIDTH + 10
             self.by = self.playery
             self.bdx = .5
@@ -50,11 +50,48 @@ init python:
         def visit(self):
             return [ self.paddle, self.ball ]
 
-        # Recomputes the position of the ball, handles bounces, and
-        # draws the screen.
+        # This draws a paddle, and checks for bounces.
+        # p staying for paddle, paddle_x and paddle_y
+        def paddle(px, py, hotside):
+
+            # Render the paddle image. We give it an 800x600 area
+            # to render into, knowing that images will render smaller.
+            # (This isn't the case with all displayables. Solid, Frame,
+            # and Fixed will expand to fill the space allotted.)
+            # We also pass in st and at.
+
+            # uses the renpy render rather than the render class
+            # renpy.render seems to take a solid object with the width and height and draws it in
+            pi = renpy.render(self.paddle, width, height, st, at)
+
+            # renpy.render returns a Render object, which we can blit to the Render we're making.
+            # blit Draws another render object into this render object.
+            r.blit(pi, (int(px), int(py - self.PADDLE_HEIGHT / 2)))
+
+            if py - self.PADDLE_HEIGHT / 2 <= self.by <= py + self.PADDLE_HEIGHT / 2:
+
+                hit = False
+
+                if oldbx >= hotside >= self.bx:
+                    self.bx = hotside + (hotside - self.bx)
+                    self.bdx = -self.bdx
+                    hit = True
+
+                elif oldbx <= hotside <= self.bx:
+                    self.bx = hotside - (self.bx - hotside)
+                    self.bdx = -self.bdx
+                    hit = True
+
+                if hit:
+                    renpy.sound.play("pong_boop.opus", channel=1)
+                    self.bspeed *= 1.10
+
+        # Recomputes the position of the ball, handles bounces, and draws the screen.
+        # it isnt called or used anywhere else because renpy itself calls it, like in tick for the App in java
         def render(self, width, height, st, at):
 
             # The Render object we'll be drawing into.
+            # first create the black box youll be drawing into
             r = renpy.Render(width, height)
 
             # Figure out the time elapsed since the previous frame.
@@ -74,8 +111,7 @@ init python:
                 self.bx += self.bdx * speed
                 self.by += self.bdy * speed
 
-            # Move the computer's paddle. It wants to go to self.by, but
-            # may be limited by it's speed limit.
+            # Move the computer's paddle. It wants to go to self.by, but may be limited by it's speed limit.
             cspeed = self.computerspeed * dtime
             if abs(self.by - self.computery) <= cspeed:
                 self.computery = self.by
@@ -102,39 +138,7 @@ init python:
                 if not self.stuck:
                     renpy.sound.play("pong_beep.opus", channel=0)
 
-            # This draws a paddle, and checks for bounces.
-            def paddle(px, py, hotside):
-
-                # Render the paddle image. We give it an 800x600 area
-                # to render into, knowing that images will render smaller.
-                # (This isn't the case with all displayables. Solid, Frame,
-                # and Fixed will expand to fill the space allotted.)
-                # We also pass in st and at.
-                pi = renpy.render(self.paddle, width, height, st, at)
-
-                # renpy.render returns a Render object, which we can
-                # blit to the Render we're making.
-                r.blit(pi, (int(px), int(py - self.PADDLE_HEIGHT / 2)))
-
-                if py - self.PADDLE_HEIGHT / 2 <= self.by <= py + self.PADDLE_HEIGHT / 2:
-
-                    hit = False
-
-                    if oldbx >= hotside >= self.bx:
-                        self.bx = hotside + (hotside - self.bx)
-                        self.bdx = -self.bdx
-                        hit = True
-
-                    elif oldbx <= hotside <= self.bx:
-                        self.bx = hotside - (self.bx - hotside)
-                        self.bdx = -self.bdx
-                        hit = True
-
-                    if hit:
-                        renpy.sound.play("pong_boop.opus", channel=1)
-                        self.bspeed *= 1.10
-
-            # Draw the two paddles.
+            # Draw the two paddles. every tick
             paddle(self.PADDLE_X, self.playery, self.PADDLE_X + self.PADDLE_WIDTH)
             paddle(width - self.PADDLE_X - self.PADDLE_WIDTH, self.computery, width - self.PADDLE_X - self.PADDLE_WIDTH)
 
@@ -147,16 +151,14 @@ init python:
             if self.bx < -50:
                 self.winner = "eileen"
 
-                # Needed to ensure that event is called, noticing
-                # the winner.
+                # Needed to ensure that event is called, noticing the winner.
                 renpy.timeout(0)
 
             elif self.bx > width + 50:
                 self.winner = "player"
                 renpy.timeout(0)
 
-            # Ask that we be re-rendered ASAP, so we can show the next
-            # frame.
+            # Ask that we be re-rendered ASAP, so we can show the next frame.
             renpy.redraw(self, 0)
 
             # Return the Render object.
@@ -167,8 +169,7 @@ init python:
 
             import pygame
 
-            # Mousebutton down == start the game by setting stuck to
-            # false.
+            # Mousebutton down == start the game by setting stuck to false.
             if ev.type == pygame.MOUSEBUTTONDOWN and ev.button == 1:
                 self.stuck = False
 
@@ -180,8 +181,7 @@ init python:
             y = min(y, self.COURT_BOTTOM)
             self.playery = y
 
-            # If we have a winner, return him or her. Otherwise, ignore
-            # the current event.
+            # If we have a winner, return him or her. Otherwise, ignore the current event.
             if self.winner:
                 return self.winner
             else:
@@ -226,7 +226,7 @@ label demo_minigame:
     e "That makes it possible to create all kinds of minigames. Would you like to play some pong?"
 
 label play_pong:
-
+ 
     window hide  # Hide the window and quick menu while in pong
     $ quick_menu = False
 
