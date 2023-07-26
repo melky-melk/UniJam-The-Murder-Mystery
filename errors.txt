@@ -2,9 +2,13 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 51: Line is followed by a block, despite not being a menu choice. Did you forget a colon at the end of the line?
-    "choice a"
-              ^
+File "game/script.rpy", line 27: expected simple expression
+    play sound "night_ambiance.mp3" volume 0.5 fadein 
+                                                      ^
+
+File "game/script.rpy", line 28: expected simple expression
+    play music "opening_scene_1.mp3" fadein 
+                                            ^
 
 Ren'Py Version: Ren'Py 8.1.1.23060707
-Tue Jul 25 11:24:35 2023
+Wed Jul 26 15:22:49 2023
