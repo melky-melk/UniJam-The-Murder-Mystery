@@ -2,13 +2,8 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 27: expected simple expression
-    play sound "night_ambiance.mp3" volume 0.5 fadein 
-                                                      ^
-
-File "game/script.rpy", line 28: expected simple expression
-    play music "opening_scene_1.mp3" fadein 
-                                            ^
+File "game/jamming.rpy", line 51: invalid syntax
+            else
 
 Ren'Py Version: Ren'Py 8.1.1.23060707
-Wed Jul 26 15:22:49 2023
+Wed Jul 26 22:32:54 2023

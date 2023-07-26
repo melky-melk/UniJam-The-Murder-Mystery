@@ -45,10 +45,10 @@ init python:
             self.pressed = ev.type == self.key_code
 
         def draw():
-            if self.pressed = true:
+            if self.pressed == true:
                 # TODO is there a better way to recolour, rather than creating a new solid to replace it
                 self.image = Solid("#aea9b0", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
-            else
+            else:
                 self.image = Solid("#ffffff", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
 
     class JamDisplayable(renpy.Displayable):
@@ -101,31 +101,30 @@ init python:
             else:
                 raise renpy.IgnoreEvent()
 
-screen pong():
+# screen jam():
+#     default jam_game = JamDisplayable()
 
-    default pong = PongDisplayable()
+#     add "bg pong field"
 
-    add "bg pong field"
+#     add pong
 
-    add pong
+#     text _("Player"):
+#         xpos 240
+#         xanchor 0.5
+#         ypos 25
+#         size 40
 
-    text _("Player"):
-        xpos 240
-        xanchor 0.5
-        ypos 25
-        size 40
+#     text _("Eileen"):
+#         xpos (1280 - 240)
+#         xanchor 0.5
+#         ypos 25
+#         size 40
 
-    text _("Eileen"):
-        xpos (1280 - 240)
-        xanchor 0.5
-        ypos 25
-        size 40
-
-    if pong.stuck:
-        text _("Click to Begin"):
-            xalign 0.5
-            ypos 50
-            size 40
+#     if pong.stuck:
+#         text _("Click to Begin"):
+#             xalign 0.5
+#             ypos 50
+#             size 40
 
 label first_jam:
     scene bg cafeteria
