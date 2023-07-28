@@ -11,9 +11,7 @@ init python:
             self.width = key.width
             # the height i.e. how long the note should be held down
             self.start_time = start_time
-            print("height before: " + str(key.height) + " duration: " + str(duration))
             self.height = int(key.height * duration)
-            print("height after: " + str(self.height))
             
             self.not_played = True
 
@@ -26,17 +24,6 @@ init python:
             note_name = notes[note_number % 12] + str(octave)
             
             return note_name
-
-        # def tick():
-        #     # check if the note was missed, delete it if its after
-        #     note_bottom = self.COURT_BOTTOM - self.BALL_HEIGHT / 2
-        #     # make this later so that the speed is visible everywhere
-        #     # self.y -= speed
-        #     self.y -= 10
-
-        #     # youve missed the note
-        #     if self.y > note_bottom:
-        #         return False
 
         def render(self, width, height, st, at):
             colour = "#9b74e8"
@@ -64,6 +51,7 @@ init python:
             colour = "#ffffff"
 
             if self.pressed:
+                # renpy.sound.play("pong_beep.opus", channel=0)
                 colour = "#aea9b0"
                 
             image = Solid(colour, xsize=self.width, ysize=self.height)
@@ -71,6 +59,7 @@ init python:
             return r
 
     class JamDisplayable(renpy.Displayable):
+
         def __init__(self, song):
             renpy.Displayable.__init__(self)
 
@@ -90,7 +79,7 @@ init python:
             for i in range(self.NUM_OF_KEYS):
                 x = self.WIDTH/10 + (self.NOTE_WIDTH + self.NOTE_WIDTH/4) * i
 
-                if i > 2:
+                if i > (self.NUM_OF_KEYS/2) - 1:
                     x += self.NOTE_WIDTH * 4
 
                 self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT, self.NOTE_WIDTH, self.NOTE_HEIGHT))
@@ -135,8 +124,9 @@ init python:
             for note in self.notes:
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
-                    # TODO make it so that the notes fall down at every tick, we can change this value so that it can fall down faster but the notes will be longer
-                    r.blit(render_object, (note.x, note.y + self.NOTE_HEIGHT))
+                    r.blit(render_object, (note.x, note.y))
+                    note.y += 1
+                    # note.y += self.NOTE_HEIGHT
 
             for key in self.keys:
                 render_object = key.render(width, height, st, at)

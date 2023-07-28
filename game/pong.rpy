@@ -122,8 +122,11 @@ init python:
 
             # Bounce off of top.
             ball_top = self.COURT_TOP + self.BALL_HEIGHT / 2
+            #  if it hits the top
             if self.by < ball_top:
+                # it adds to the y value, decreasing it and making it go lower
                 self.by = ball_top + (ball_top - self.by)
+                # then change its directional y
                 self.bdy = -self.bdy
 
                 if not self.stuck:
