@@ -30,7 +30,7 @@ def convert_midi_to_txt(midi_file_path, output_file_path):
 
         elif msg.type == 'note_off':
             for note in reversed(notes):
-                if note['Note'] == msg.note and note['Duration'] == 0:
+                if note['Note'] == (msg.note) and note['Duration'] == 0:
                     note['Duration'] = msg.time
                     break
 
@@ -44,5 +44,5 @@ if __name__ == "__main__":
     song_name = "the_lick"
 
     midi_file_path =  song_name + ".mid"
-    output_file_path = song_name + ".txt"
+    output_file_path = song_name + " copy 3.txt"
     convert_midi_to_txt(midi_file_path, output_file_path)
