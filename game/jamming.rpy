@@ -1,17 +1,27 @@
 init python:
     import pygame
+    import os 
+
 
     class Note():
-        def __init__(self, note, key_code, x, y, width, height):
+        def __init__(self, key, start_time, duration):
+            self.note = key.note
+            self.x = key.x
+            # spawns in at the top of the screen
+            self.y = 0
+            self.width = key.width
+            # the height i.e. how long the note should be held down
+            self.height = key.height * duration
 
-            self.note = note
-            self.key_code = key_code
-            self.x = x
-            self.y = y
-            self.width = width
-            self.height = height
-
-            self.image = Solid("#ffffff", xsize=self.width, ysize=self.height)
+        def note_number_to_name(note_number):
+            # List of note names in scientific pitch notation
+            notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+            
+            # Calculate the octave number and the note name
+            octave = note_number // 12 - 1
+            note_name = notes[note_number % 12] + str(octave)
+            
+            return note_name
 
         def tick():
             # check if the note was missed, delete it if its after
@@ -24,9 +34,14 @@ init python:
             if self.y > note_bottom:
                 return False
 
-    class Key(Note):
+    class Key():
         def __init__(self, note, key_code, x, y, width, height):
-            super().__init__(note, key_code, x, y, width, height)
+            self.note = note
+            self.key_code = key_code
+            self.x = x
+            self.y = y
+            self.width = width
+            self.height = height
             self.pressed = False
 
         def set_pressed(self, pressed):
@@ -34,37 +49,67 @@ init python:
             self.pressed = pressed
 
         def render(self, width, height, st, at):
-            if self.pressed:
-                self.image = Solid("#aea9b0", xsize=self.width, ysize=self.height)
-            else:
-                self.image = Solid("#ffffff", xsize=self.width, ysize=self.height)
+            colour = "ffffff"
 
-            r = renpy.render(self.image, width, height, st, at)
+            if self.pressed:
+                colour = "#aea9b0"
+                
+            image = Solid(colour, xsize=self.width, ysize=self.height)
+            r = renpy.render(image, width, height, st, at)
             return r
 
     class JamDisplayable(renpy.Displayable):
-        def __init__(self):
+        def __init__(self, song):
             renpy.Displayable.__init__(self)
 
-            # The sizes of some of the images.
-            keyboard = ["1", "2", "3", "8", "9", "0"]
-            keyboard_key_code = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_8, pygame.K_9, pygame.K_0]
-            self.keys = []
             self.HEIGHT = 800
             self.WIDTH = 1600
             self.SPEED = 10
 
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 150
+            self.NUM_OF_KEYS = 6
+
+            keyboard = ["1", "2", "3", "8", "9", "0"]
+            keyboard_key_code = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_8, pygame.K_9, pygame.K_0]
+            self.keys = []
 
             # makes 6 keys for the game object to contain
-            for i in range(6):
+            for i in range(self.NUM_OF_KEYS):
                 x = self.WIDTH/10 + (self.NOTE_WIDTH + self.NOTE_WIDTH/4) * i
 
                 if i > 2:
                     x += self.NOTE_WIDTH * 4
 
                 self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT, self.NOTE_WIDTH, self.NOTE_HEIGHT))
+
+            # generates a path from the user's computer... we can use this later to get their name...
+            path = os.path.join(sys.path[0], "game\\jam_data\\" + song + ".txt")
+            f = open(path, "r") 
+
+            # Start Time    Pitch	Duration	Dynamic
+            notes = []
+            for line in f:
+                line = line.split("\t", 4)
+                notes.append(int(line[1]))
+
+            set(notes)
+            notes.sort()
+            for i in range(len(notes)):
+                # using the smallest note then using modulo we can find which key this not corresponds to
+                key_index = i
+
+                if (i >= self.NUM_OF_KEYS):
+                    key_index = self.NUM_OF_KEYS - 1
+                
+                key = self.keys[key_index]
+
+                # copy all the values in note to key, because the position should mostly the same
+                # but it's position should be at the very top of the box, and how tall it should be
+                # it uses the key for all these values
+                notes[i] = Note(key, line[0], line[2])
+
+            f.close()
 
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
@@ -90,7 +135,7 @@ init python:
                     if key.key_code == ev.key:
                         key.set_pressed(pressed)
 screen jam():
-    default jam_game = JamDisplayable()
+    default jam_game = JamDisplayable("the_lick")
 
     add jam_game
 
@@ -111,3 +156,6 @@ label first_jam:
     "Eunie" "Hey don't worry, you'll do great" 
     
     call screen jam
+
+    show eunie angry
+    "Eunie" "bruh"
