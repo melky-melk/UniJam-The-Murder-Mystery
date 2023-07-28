@@ -11,7 +11,10 @@ init python:
             self.width = key.width
             # the height i.e. how long the note should be held down
             self.start_time = start_time
-            self.height = key.height
+            print("height before: " + str(key.height) + " duration: " + str(duration))
+            self.height = key.height * duration
+            print("height after: " + str(self.height))
+            
             self.not_played = True
 
         def note_number_to_name(note_number):
@@ -24,16 +27,16 @@ init python:
             
             return note_name
 
-        def tick():
-            # check if the note was missed, delete it if its after
-            note_bottom = self.COURT_BOTTOM - self.BALL_HEIGHT / 2
-            # make this later so that the speed is visible everywhere
-            # self.y -= speed
-            self.y -= 10
+        # def tick():
+        #     # check if the note was missed, delete it if its after
+        #     note_bottom = self.COURT_BOTTOM - self.BALL_HEIGHT / 2
+        #     # make this later so that the speed is visible everywhere
+        #     # self.y -= speed
+        #     self.y -= 10
 
-            # youve missed the note
-            if self.y > note_bottom:
-                return False
+        #     # youve missed the note
+        #     if self.y > note_bottom:
+        #         return False
 
         def render(self, width, height, st, at):
             colour = "#9b74e8"
@@ -98,13 +101,13 @@ init python:
 
             # Start Time    Pitch	Duration	Dynamic
             notes = []
+            lines = []
             for line in f:
                 line = line.split("\t", 4)
                 notes.append(int(line[1]))
+                lines.append(line)
 
-            set(notes)
             notes.sort()
-
             # how many seconds it waits before the notes spawn
             buffer_time = 3
 
@@ -120,7 +123,7 @@ init python:
                 # copy all the values in note to key, because the position should mostly the same
                 # but it's position should be at the very top of the box, and how tall it should be
                 # it uses the key for all these values
-                notes[i] = Note(key, float(line[0]) + buffer_time, float(line[2]))
+                notes[i] = Note(key, float(lines[i][0]) + buffer_time, float(lines[i][2]))
 
             self.notes = sorted(notes, key=lambda note: note.start_time)
             f.close()
@@ -132,8 +135,8 @@ init python:
             for note in self.notes:
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
+                    # TODO make it so that the notes fall down at every tick, we can change this value so that it can fall down faster but the notes will be longer
                     r.blit(render_object, (note.x, note.y + self.NOTE_HEIGHT))
-                    # r.blit(render_object, (note.x, note.y + self.NOTE_HEIGHT)) #so that the notes fall down at every tick, we can change this value so that it can fall down faster but the notes will be longer
 
             for key in self.keys:
                 render_object = key.render(width, height, st, at)
