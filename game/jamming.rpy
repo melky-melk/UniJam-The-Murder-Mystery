@@ -2,16 +2,16 @@ init python:
     import pygame
 
     class Note():
-        def __init__(self, note, key_code, x, y):
-            self.NOTE_WIDTH = 60
-            self.NOTE_HEIGHT = 150
+        def __init__(self, note, key_code, x, y, width, height):
 
             self.note = note
             self.key_code = key_code
             self.x = x
             self.y = y
+            self.width = width
+            self.height = height
 
-            self.image = Solid("#ffffff", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
+            self.image = Solid("#ffffff", xsize=self.width, ysize=self.height)
 
         def tick():
             # check if the note was missed, delete it if its after
@@ -25,29 +25,19 @@ init python:
                 return False
 
     class Key(Note):
-        def __init__(self, note, key_code, x, y):
-            super().__init__(note, key_code, x, y)
+        def __init__(self, note, key_code, x, y, width, height):
+            super().__init__(note, key_code, x, y, width, height)
             self.pressed = False
 
-        def tick():
-            # check if it is being pressed down, check if it is hitting the note correctly
-            # increment points and combo
-            return
-
         def set_pressed(self, pressed):
-            # if the event type was its keycode, meaning if the keycode has been hit you want to change the colour of the key that has been hit
-            # if ev.type == self.key_code:
-            #     self.pressed = true
-            
-            # TODO should it be that this will constantly change what is being pressed down where should the self pressed reset?
+            # if the event type was its keycode, meaning if the keycode has been hit you want to change the colour of the key that has been hit           
             self.pressed = pressed
 
         def render(self, width, height, st, at):
             if self.pressed:
-                # TODO is there a better way to recolour, rather than creating a new solid to replace it
-                self.image = Solid("#aea9b0", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
+                self.image = Solid("#aea9b0", xsize=self.width, ysize=self.height)
             else:
-                self.image = Solid("#ffffff", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
+                self.image = Solid("#ffffff", xsize=self.width, ysize=self.height)
 
             r = renpy.render(self.image, width, height, st, at)
             return r
@@ -72,9 +62,9 @@ init python:
                 x = self.WIDTH/10 + (self.NOTE_WIDTH + self.NOTE_WIDTH/4) * i
 
                 if i > 2:
-                    x += 300
+                    x += self.NOTE_WIDTH * 4
 
-                self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT))
+                self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT, self.NOTE_WIDTH, self.NOTE_HEIGHT))
 
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
@@ -87,7 +77,6 @@ init python:
             renpy.redraw(self, 0)
             return r
 
-        # Handles events i.e. whenever a button is pressed, keys being up, down, mouse being clicked and so on.
         def event(self, ev, x, y, st):
             # figure out if the event is a key up or key down
             pressed = None

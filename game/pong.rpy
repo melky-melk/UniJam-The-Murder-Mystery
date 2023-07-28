@@ -164,7 +164,7 @@ init python:
             # Return the Render object.
             return r
 
-        # Handles events.
+        # Handles events i.e. whenever a button is pressed, keys being up, down, mouse being clicked and so on.
         def event(self, ev, x, y, st):
 
             import pygame
