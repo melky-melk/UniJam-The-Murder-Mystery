@@ -100,11 +100,16 @@ init python:
 
             # Start Time    Pitch	Duration	Dynamic
             # the actual note number it is
+            unique_notes = []
             lines = []
             for line in f:
                 line = line.split("\t", 4)
                 lines.append(line)
+                unique_notes.append(int(line[1]))
 
+            unique_notes.sort()
+            unique_notes = list(set(unique_notes))
+            print(unique_notes)
             # this needs to be sorted by the pitch first
             lines = sorted(lines, key=lambda x: x[1])
             # how many seconds it waits before the note_values spawn
@@ -116,7 +121,10 @@ init python:
                 # using the smallest note then using modulo we can find which key this not corresponds to
                 key_index = i
 
-                if (i >= self.NUM_OF_KEYS):
+                # FIXME, there are more played notes than there are keys so the things get a bit jank
+                note_value = int(line[1])
+                print(note_value >= unique_notes[self.NUM_OF_KEYS])
+                if (note_value >= unique_notes[self.NUM_OF_KEYS]):
                     key_index = self.NUM_OF_KEYS - 1
                 
                 key = self.keys[key_index]
