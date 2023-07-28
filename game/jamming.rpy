@@ -2,7 +2,6 @@ init python:
     import pygame
     import os 
 
-
     class Note():
         def __init__(self, key, start_time, duration):
             self.note = key.note
@@ -12,7 +11,8 @@ init python:
             self.width = key.width
             # the height i.e. how long the note should be held down
             self.start_time = start_time
-            self.height = key.height * duration
+            self.height = key.height
+            self.not_played = True
 
         def note_number_to_name(note_number):
             # List of note names in scientific pitch notation
@@ -35,6 +35,14 @@ init python:
             if self.y > note_bottom:
                 return False
 
+        def render(self, width, height, st, at):
+            colour = "#9b74e8"
+                
+            image = Solid(colour, xsize=self.width, ysize=self.height)
+            r = renpy.render(image, width, height, st, at)
+            self.not_played = False
+            return r
+
     class Key():
         def __init__(self, note, key_code, x, y, width, height):
             self.note = note
@@ -50,7 +58,7 @@ init python:
             self.pressed = pressed
 
         def render(self, width, height, st, at):
-            colour = "ffffff"
+            colour = "#ffffff"
 
             if self.pressed:
                 colour = "#aea9b0"
@@ -68,7 +76,7 @@ init python:
             self.SPEED = 10
 
             self.NOTE_WIDTH = 60
-            self.NOTE_HEIGHT = 150
+            self.NOTE_HEIGHT = 200
             self.NUM_OF_KEYS = 6
 
             keyboard = ["1", "2", "3", "8", "9", "0"]
@@ -96,6 +104,10 @@ init python:
 
             set(notes)
             notes.sort()
+
+            # how many seconds it waits before the notes spawn
+            buffer_time = 3
+
             for i in range(len(notes)):
                 # using the smallest note then using modulo we can find which key this not corresponds to
                 key_index = i
@@ -108,7 +120,7 @@ init python:
                 # copy all the values in note to key, because the position should mostly the same
                 # but it's position should be at the very top of the box, and how tall it should be
                 # it uses the key for all these values
-                notes[i] = Note(key, line[0], line[2])
+                notes[i] = Note(key, float(line[0]) + buffer_time, float(line[2]))
 
             self.notes = sorted(notes, key=lambda note: note.start_time)
             f.close()
@@ -116,12 +128,16 @@ init python:
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
 
+            # st meaning start time, is the number of seconds that have passed
+            for note in self.notes:
+                if (st >= note.start_time): 
+                    render_object = note.render(width, height, st, at)
+                    r.blit(render_object, (note.x, note.y + self.NOTE_HEIGHT))
+                    # r.blit(render_object, (note.x, note.y + self.NOTE_HEIGHT)) #so that the notes fall down at every tick, we can change this value so that it can fall down faster but the notes will be longer
+
             for key in self.keys:
                 render_object = key.render(width, height, st, at)
                 r.blit(render_object, (key.x, key.y))
-
-            # st is the number of seconds that have passed
-            
 
             # Ask that we be re-rendered ASAP, so we can show the next frame. refreshes the screen
             renpy.redraw(self, 0)
@@ -160,6 +176,8 @@ label first_jam:
     show eunie neutral
     "Eunie" "Hey don't worry, you'll do great" 
     
+    hide eunie neutral
+
     call screen jam
 
     show eunie angry
