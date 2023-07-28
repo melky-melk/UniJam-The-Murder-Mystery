@@ -11,6 +11,7 @@ init python:
             self.y = 0
             self.width = key.width
             # the height i.e. how long the note should be held down
+            self.start_time = start_time
             self.height = key.height * duration
 
         def note_number_to_name(note_number):
@@ -109,6 +110,7 @@ init python:
                 # it uses the key for all these values
                 notes[i] = Note(key, line[0], line[2])
 
+            self.notes = sorted(notes, key=lambda note: note.start_time)
             f.close()
 
         def render(self, width, height, st, at):
@@ -117,6 +119,9 @@ init python:
             for key in self.keys:
                 render_object = key.render(width, height, st, at)
                 r.blit(render_object, (key.x, key.y))
+
+            # st is the number of seconds that have passed
+            
 
             # Ask that we be re-rendered ASAP, so we can show the next frame. refreshes the screen
             renpy.redraw(self, 0)
