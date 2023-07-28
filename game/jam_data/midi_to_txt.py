@@ -17,18 +17,20 @@ def convert_midi_to_txt(midi_file_path, output_file_path):
     current_time = 0
 
     for msg in mid:
+        # FIXME NOTE, THAT THIS DOES NOT ACCOUNT FOR THINGS THAT START AT THE SAME TIME
         current_time += msg.time
         if msg.type == 'note_on':
             note_info = {
                 'Start Time': current_time,
-                'Note': note_number_to_name(msg.note),
+                'Note': msg.note,
+                # 'Note': note_number_to_name(msg.note),
                 'Duration': 0,  # Will be updated with the corresponding note_off message
             }
             notes.append(note_info)
 
         elif msg.type == 'note_off':
             for note in reversed(notes):
-                if note['Note'] == note_number_to_name(msg.note) and note['Duration'] == 0:
+                if note['Note'] == msg.note and note['Duration'] == 0:
                     note['Duration'] = msg.time
                     break
 
