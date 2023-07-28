@@ -12,7 +12,7 @@ init python:
             # the height i.e. how long the note should be held down
             self.start_time = start_time
             print("height before: " + str(key.height) + " duration: " + str(duration))
-            self.height = key.height * duration
+            self.height = int(key.height * duration)
             print("height after: " + str(self.height))
             
             self.not_played = True
