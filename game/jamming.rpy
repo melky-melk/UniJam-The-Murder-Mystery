@@ -3,8 +3,8 @@ init python:
 
     class Note():
         def __init__(self, note, key_code, x, y):
-            self.NOTE_WIDTH = 30
-            self.NOTE_HEIGHT = 90
+            self.NOTE_WIDTH = 60
+            self.NOTE_HEIGHT = 150
 
             self.note = note
             self.key_code = key_code
@@ -50,7 +50,6 @@ init python:
                 self.image = Solid("#ffffff", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
 
             r = renpy.render(self.image, width, height, st, at)
-
             return r
 
     class JamDisplayable(renpy.Displayable):
@@ -61,13 +60,21 @@ init python:
             keyboard = ["1", "2", "3", "8", "9", "0"]
             keyboard_key_code = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_8, pygame.K_9, pygame.K_0]
             self.keys = []
-            self.TOP = 129
-            self.BOTTOM = 650
+            self.HEIGHT = 800
+            self.WIDTH = 1600
             self.SPEED = 10
+
+            self.NOTE_WIDTH = 60
+            self.NOTE_HEIGHT = 150
 
             # makes 6 keys for the game object to contain
             for i in range(6):
-                self.keys.append(Key(keyboard[i], keyboard_key_code[i], 40 * i, self.BOTTOM))
+                x = self.WIDTH/10 + (self.NOTE_WIDTH + self.NOTE_WIDTH/4) * i
+
+                if i > 2:
+                    x += 300
+
+                self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT))
 
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
