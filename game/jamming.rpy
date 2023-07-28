@@ -25,14 +25,11 @@ init python:
             self.start_time = float(start_time)
             self.height = int(key.height * duration)
             
-            self.not_played = True
-
         def render(self, width, height, st, at):
             colour = "#9b74e8"
-                
+            
             image = Solid(colour, xsize=self.width, ysize=self.height)
             r = renpy.render(image, width, height, st, at)
-            self.not_played = False
             return r
 
         def __str__(self):
@@ -54,7 +51,6 @@ init python:
             self.pressed = False
 
         def set_pressed(self, pressed):
-            # if the event type was its keycode, meaning if the keycode has been hit you want to change the colour of the key that has been hit           
             self.pressed = pressed
 
         def render(self, width, height, st, at):
@@ -69,6 +65,48 @@ init python:
             return r
 
     class JamDisplayable(renpy.Displayable):
+
+        def parsing_notes(self, song):
+            # generates a path from the user's computer
+            path = os.path.join(sys.path[0], "game\\jam_data\\" + song + ".txt")
+            f = open(path, "r") 
+
+            # Start Time    Pitch	Duration	Dynamic
+            # the actual note number it is
+            unique_notes = []
+            
+            lines = []
+            for line in f:
+                line = line.split("\t", 4)
+                lines.append(line)
+                unique_notes.append(int(line[1]))
+
+            unique_notes.sort()
+            unique_notes = list(set(unique_notes))
+            lines = sorted(lines, key=lambda x: x[1]) # sort by pitch
+
+            # how many seconds it waits before the note_values spawn
+            buffer_time = 3
+
+            self.notes = []
+            # currently the note_values are arranged by their pitch, so these first note_values should correspond the lowest key avaliable 
+            for i, line in enumerate(lines):
+                note_value = int(line[1])
+
+                # loop through the unique notes and make the key index equal to the unique note
+                for j, unique_note in enumerate(unique_notes):
+                    if (note_value == unique_note):
+                        key_index = j
+                
+                # TODO if there are more than the unique notes self.NUM_OF_KEYS we will get a key error when accessing keys. if this is true, then make it so that the notes higher will just get assigned to the end again 
+                
+                key = self.keys[key_index]
+
+                # use the key to gather information inside of the note
+                self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2])))
+
+            self.notes = sorted(self.notes, key=lambda x: x.start_time)
+            f.close()
 
         def __init__(self, song):
             renpy.Displayable.__init__(self)
@@ -93,52 +131,8 @@ init python:
                     x += self.NOTE_WIDTH * 4
 
                 self.keys.append(Key(keyboard[i], keyboard_key_code[i], x, self.HEIGHT, self.NOTE_WIDTH, self.NOTE_HEIGHT))
-
-            # generates a path from the user's computer... we can use this later to get their name...
-            path = os.path.join(sys.path[0], "game\\jam_data\\" + song + ".txt")
-            f = open(path, "r") 
-
-            # Start Time    Pitch	Duration	Dynamic
-            # the actual note number it is
-            unique_notes = []
-            lines = []
-            for line in f:
-                line = line.split("\t", 4)
-                lines.append(line)
-                unique_notes.append(int(line[1]))
-
-            unique_notes.sort()
-            unique_notes = list(set(unique_notes))
-            print(unique_notes)
-            # this needs to be sorted by the pitch first
-            lines = sorted(lines, key=lambda x: x[1])
-            # how many seconds it waits before the note_values spawn
-            buffer_time = 3
-
-            self.notes = []
-            # currently the note_values are arranged by their pitch, so these first note_values should correspond the lowest key avaliable 
-            for i, line in enumerate(lines):
-                # using the smallest note then using modulo we can find which key this not corresponds to
-
-                note_value = int(line[1])
-
-                for j, unique_note in enumerate(unique_notes):
-                    if (note_value == unique_note):
-                        key_index = j
-                
-                key = self.keys[key_index]
-
-                # copy all the values in note to key, because the position should mostly the same
-                # but it's position should be at the very top of the box, and how tall it should be
-                # it uses the key for all these values
-                self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2])))
-
-            self.notes = sorted(self.notes, key=lambda x: x.start_time)
-            print("final sort")
-            for note in self.notes:
-                print(note)
-
-            f.close()
+            
+            self.parsing_notes(song)
 
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
@@ -147,9 +141,9 @@ init python:
             for note in self.notes:
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
+                    # places the rendered object inside of the big rendered object over the entire window
                     r.blit(render_object, (note.x, note.y))
                     note.y += self.SPEED
-                    # note.y += self.NOTE_HEIGHT
 
             for key in self.keys:
                 render_object = key.render(width, height, st, at)
@@ -167,6 +161,7 @@ init python:
             elif pygame.KEYUP == ev.type:
                 pressed = False
             
+            # if it wasnt anything then ev.key would not exist
             if pressed != None:
                 for key in self.keys:
                     if key.key_code == ev.key:

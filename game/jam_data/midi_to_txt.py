@@ -44,5 +44,5 @@ if __name__ == "__main__":
     song_name = "the_lick"
 
     midi_file_path =  song_name + ".mid"
-    output_file_path = song_name + " copy 3.txt"
+    output_file_path = song_name + " .txt"
     convert_midi_to_txt(midi_file_path, output_file_path)
