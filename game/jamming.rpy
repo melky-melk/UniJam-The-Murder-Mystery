@@ -2,28 +2,30 @@ init python:
     import pygame
     import os 
 
+    def note_number_to_name(note_number):
+        # List of note names in scientific pitch notation
+        notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+        
+        # Calculate the octave number and the note name
+        octave = note_number // 12 - 1
+        note_name = notes[note_number % 12] + str(octave)
+        
+        return note_name
+
     class Note():
-        def __init__(self, key, start_time, duration):
-            self.note = key.note
+        def __init__(self, key, note, start_time, duration):
+            self.key = key 
+            self.note = note
             self.x = key.x
+
             # spawns in at the top of the screen
             self.y = 0
             self.width = key.width
             # the height i.e. how long the note should be held down
-            self.start_time = start_time
+            self.start_time = float(start_time)
             self.height = int(key.height * duration)
             
             self.not_played = True
-
-        def note_number_to_name(note_number):
-            # List of note names in scientific pitch notation
-            notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-            
-            # Calculate the octave number and the note name
-            octave = note_number // 12 - 1
-            note_name = notes[note_number % 12] + str(octave)
-            
-            return note_name
 
         def render(self, width, height, st, at):
             colour = "#9b74e8"
@@ -33,14 +35,22 @@ init python:
             self.not_played = False
             return r
 
+        def __str__(self):
+            return self.note + " " + str(self.key.pitch) + " " + str(self.start_time)
+
     class Key():
-        def __init__(self, note, key_code, x, y, width, height):
-            self.note = note
+        
+        # NOTE YOU DIDNT ACTUALLY PUT THE REAL NOTES FROM THE MIDI INTO THE KEYS
+        def __init__(self, pitch, key_code, x, y, width, height):
+            self.pitch = pitch
+            self.note = note_number_to_name(int(pitch))
             self.key_code = key_code
+
             self.x = x
             self.y = y
             self.width = width
             self.height = height
+            
             self.pressed = False
 
         def set_pressed(self, pressed):
@@ -65,7 +75,7 @@ init python:
 
             self.HEIGHT = 800
             self.WIDTH = 1600
-            self.SPEED = 10
+            self.SPEED = 0.5
 
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 200
@@ -89,18 +99,20 @@ init python:
             f = open(path, "r") 
 
             # Start Time    Pitch	Duration	Dynamic
-            notes = []
+            # the actual note number it is
             lines = []
             for line in f:
                 line = line.split("\t", 4)
-                notes.append(int(line[1]))
                 lines.append(line)
 
-            notes.sort()
-            # how many seconds it waits before the notes spawn
+            # this needs to be sorted by the pitch first
+            lines = sorted(lines, key=lambda x: x[1])
+            # how many seconds it waits before the note_values spawn
             buffer_time = 3
 
-            for i in range(len(notes)):
+            self.notes = []
+            # currently the note_values are arranged by their pitch, so these first note_values should correspond the lowest key avaliable 
+            for i, line in enumerate(lines):
                 # using the smallest note then using modulo we can find which key this not corresponds to
                 key_index = i
 
@@ -112,9 +124,13 @@ init python:
                 # copy all the values in note to key, because the position should mostly the same
                 # but it's position should be at the very top of the box, and how tall it should be
                 # it uses the key for all these values
-                notes[i] = Note(key, float(lines[i][0]) + buffer_time, float(lines[i][2]))
+                self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2])))
 
-            self.notes = sorted(notes, key=lambda note: note.start_time)
+            self.notes = sorted(self.notes, key=lambda x: x.start_time)
+            print("final sort")
+            for note in self.notes:
+                print(note)
+
             f.close()
 
         def render(self, width, height, st, at):
@@ -125,7 +141,7 @@ init python:
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
                     r.blit(render_object, (note.x, note.y))
-                    note.y += 1
+                    note.y += self.SPEED
                     # note.y += self.NOTE_HEIGHT
 
             for key in self.keys:
