@@ -75,7 +75,7 @@ init python:
 
             self.HEIGHT = 800
             self.WIDTH = 1600
-            self.SPEED = 0.5
+            self.SPEED = 2
 
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 200
@@ -119,13 +119,12 @@ init python:
             # currently the note_values are arranged by their pitch, so these first note_values should correspond the lowest key avaliable 
             for i, line in enumerate(lines):
                 # using the smallest note then using modulo we can find which key this not corresponds to
-                key_index = i
 
-                # FIXME, there are more played notes than there are keys so the things get a bit jank
                 note_value = int(line[1])
-                print(note_value >= unique_notes[self.NUM_OF_KEYS])
-                if (note_value >= unique_notes[self.NUM_OF_KEYS]):
-                    key_index = self.NUM_OF_KEYS - 1
+
+                for j, unique_note in enumerate(unique_notes):
+                    if (note_value == unique_note):
+                        key_index = j
                 
                 key = self.keys[key_index]
 
