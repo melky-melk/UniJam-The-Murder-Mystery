@@ -3,10 +3,8 @@ init python:
 
     class Note():
         def __init__(self, note, key_code, x, y):
-            # renpy.Displayable.__init__(self)
-
             self.NOTE_WIDTH = 30
-            self.NOTE_HEIGHT = 30
+            self.NOTE_HEIGHT = 90
 
             self.note = note
             self.key_code = key_code
@@ -24,107 +22,81 @@ init python:
 
             # youve missed the note
             if self.y > note_bottom:
-                return false
+                return False
 
     class Key(Note):
         def __init__(self, note, key_code, x, y):
             super().__init__(note, key_code, x, y)
-            self.pressed = false
+            self.pressed = False
 
         def tick():
             # check if it is being pressed down, check if it is hitting the note correctly
             # increment points and combo
             return
 
-        def event(self, ev, x, y, st):
+        def set_pressed(self, pressed):
             # if the event type was its keycode, meaning if the keycode has been hit you want to change the colour of the key that has been hit
             # if ev.type == self.key_code:
             #     self.pressed = true
             
             # TODO should it be that this will constantly change what is being pressed down where should the self pressed reset?
-            self.pressed = ev.type == self.key_code
+            self.pressed = pressed
 
-        def draw():
-            if self.pressed == true:
+        def render(self, width, height, st, at):
+            if self.pressed:
                 # TODO is there a better way to recolour, rather than creating a new solid to replace it
                 self.image = Solid("#aea9b0", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
             else:
                 self.image = Solid("#ffffff", xsize=self.NOTE_WIDTH, ysize=self.NOTE_HEIGHT)
+
+            r = renpy.render(self.image, width, height, st, at)
+
+            return r
 
     class JamDisplayable(renpy.Displayable):
         def __init__(self):
             renpy.Displayable.__init__(self)
 
             # The sizes of some of the images.
-            keyboard = ["S", "D", "F", "J", "K", "L"]
-            keyboard_key_code = [pygame.K_s, pygame.K_d, pygame.K_f, pygame.K_j, pygame.K_k, pygame.K_l]
+            keyboard = ["1", "2", "3", "8", "9", "0"]
+            keyboard_key_code = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_8, pygame.K_9, pygame.K_0]
             self.keys = []
             self.TOP = 129
             self.BOTTOM = 650
             self.SPEED = 10
 
-            # makes 8 keys for the game object to contain
+            # makes 6 keys for the game object to contain
             for i in range(6):
-                keys.add(Key(keyboard[i], keyboard_key_code[i], 40 * i, COURT_BOTTOM))
+                self.keys.append(Key(keyboard[i], keyboard_key_code[i], 40 * i, self.BOTTOM))
 
-        def render(self):
+        def render(self, width, height, st, at):
             r = renpy.Render(width, height)
+
+            for key in self.keys:
+                render_object = key.render(width, height, st, at)
+                r.blit(render_object, (key.x, key.y))
 
             # Ask that we be re-rendered ASAP, so we can show the next frame. refreshes the screen
             renpy.redraw(self, 0)
-
             return r
 
-        # Handles events.
-        # ON BUTTON PRESS CHANGE COLOUR
+        # Handles events i.e. whenever a button is pressed, keys being up, down, mouse being clicked and so on.
         def event(self, ev, x, y, st):
+            # figure out if the event is a key up or key down
+            pressed = None
+            if pygame.KEYDOWN == ev.type:
+                pressed = True
+            elif pygame.KEYUP == ev.type:
+                pressed = False
+            
+            if pressed != None:
+                for key in self.keys:
+                    if key.key_code == ev.key:
+                        key.set_pressed(pressed)
+screen jam():
+    default jam_game = JamDisplayable()
 
-            import pygame
-
-            # Mousebutton down == start the game by setting stuck to
-            # false.
-            if ev.type == pygame.MOUSEBUTTONDOWN and ev.button == 1:
-                self.stuck = False
-
-                # Ensure the pong screen updates.
-                renpy.restart_interaction()
-
-            # Set the position of the player's paddle.
-            y = max(y, self.COURT_TOP)
-            y = min(y, self.COURT_BOTTOM)
-            self.playery = y
-
-            # If we have a winner, return him or her. Otherwise, ignore
-            # the current event.
-            if self.winner:
-                return self.winner
-            else:
-                raise renpy.IgnoreEvent()
-
-# screen jam():
-#     default jam_game = JamDisplayable()
-
-#     add "bg pong field"
-
-#     add pong
-
-#     text _("Player"):
-#         xpos 240
-#         xanchor 0.5
-#         ypos 25
-#         size 40
-
-#     text _("Eileen"):
-#         xpos (1280 - 240)
-#         xanchor 0.5
-#         ypos 25
-#         size 40
-
-#     if pong.stuck:
-#         text _("Click to Begin"):
-#             xalign 0.5
-#             ypos 50
-#             size 40
+    add jam_game
 
 label first_jam:
     scene bg cafeteria
@@ -135,9 +107,11 @@ label first_jam:
         yoffset 0
         easein 0.30 yoffset -75
         easeout 0.25 yoffset 0
+    
     "Eunie" "Hey! You made it"
     "Jamie" "Haha... yeah I did. I- really don't know how this will go man"
 
     show eunie neutral
     "Eunie" "Hey don't worry, you'll do great" 
-
+    
+    call screen jam

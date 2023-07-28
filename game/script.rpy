@@ -24,7 +24,7 @@ label start:
     scene bg cliff_bad
     show eunie neutral
 
-    play music "opening_scene_1.mp3" fadein 0.75 # loop
+    play music "Pirouette_Among_the_Stars_WIP.mp3" fadein 0.75 # loop
     play audio "night_ambiance.mp3" volume 0.1 fadein 0.75 # loop
     "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
 
@@ -68,6 +68,13 @@ label start:
         easeout 0.25 yoffset 0
     "Eunie" "I can promise you its worth going, at least just once to try it out"
     "Jamie" "Ok... If you say so."
+    hide eunie neutral
+    hide bg cliff_bad
+
+    stop audio
+    stop music
     "I mean... Whats the worst that can happen?"
-    stop audio fadeout 1.0
-    stop music fadeout 1.0
+
+    pause 0.5
+
+    jump first_jam
