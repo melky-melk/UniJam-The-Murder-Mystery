@@ -19,11 +19,11 @@ init python:
             self.x = key.x
 
             # spawns in at the top of the screen
-            self.y = 0
             self.width = key.width
             # the height i.e. how long the note should be held down
             self.start_time = float(start_time)
             self.height = int(key.height * duration)
+            self.y = 0 - self.height
             
         def render(self, width, height, st, at):
             colour = "#9b74e8"
@@ -36,8 +36,6 @@ init python:
             return self.note + " " + str(self.key.pitch) + " " + str(self.start_time)
 
     class Key():
-        
-        # NOTE YOU DIDNT ACTUALLY PUT THE REAL NOTES FROM THE MIDI INTO THE KEYS
         def __init__(self, pitch, key_code, x, y, width, height):
             self.pitch = pitch
             self.note = note_number_to_name(int(pitch))
@@ -120,7 +118,7 @@ init python:
 
             self.HEIGHT = 800
             self.WIDTH = 1600
-            self.SPEED = 2
+            self.SPEED = 1
 
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 200
