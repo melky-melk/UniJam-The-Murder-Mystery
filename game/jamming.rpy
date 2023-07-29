@@ -17,6 +17,7 @@ init python:
             self.key = key 
             self.note = note
             self.x = key.x
+            self.pressed = False
 
             # spawns in at the top of the screen
             self.width = key.width
@@ -25,8 +26,14 @@ init python:
             self.height = int(key.height * duration)
             self.y = 0 - self.height
             
+        def set_pressed(self, pressed):
+            self.pressed = pressed
+
         def render(self, width, height, st, at):
             colour = "#9b74e8"
+
+            if self.pressed:
+                colour = "#6282f5"
             
             image = Solid(colour, xsize=self.width, ysize=self.height)
             r = renpy.render(image, width, height, st, at)
@@ -52,14 +59,16 @@ init python:
             self.pressed = pressed
 
         def render(self, width, height, st, at):
-            colour = "#ffffff"
 
             if self.pressed:
                 # renpy.sound.play("pong_beep.opus", channel=0)
                 colour = "#aea9b0"
+                self.image = Solid(colour, xsize=self.width, ysize=self.height)
+            else:
+                colour = "#ffffff"
+                self.image = Solid(colour, xsize=self.width, ysize=self.height)
                 
-            image = Solid(colour, xsize=self.width, ysize=self.height)
-            r = renpy.render(image, width, height, st, at)
+            r = renpy.render(self.image, width, height, st, at)
             return r
 
     class JamDisplayable(renpy.Displayable):
@@ -101,11 +110,11 @@ init python:
                         key_index = j
                 
                 # TODO if there are more than the unique notes self.NUM_OF_KEYS we will get a key error when accessing keys. if this is true, then make it so that the notes higher will just get assigned to the end again 
-                
                 key = self.keys[key_index]
 
                 # use the key to gather information inside of the note
-                self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2])))
+                self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2]) * self.SPEED))
+                # this speed thing is a little weird
 
             self.notes = sorted(self.notes, key=lambda x: x.start_time)
 
@@ -118,7 +127,7 @@ init python:
 
             self.HEIGHT = 800
             self.WIDTH = 1600
-            self.SPEED = 1
+            self.SPEED = 1.5
 
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 200
@@ -144,6 +153,9 @@ init python:
 
             # st meaning start time, is the number of seconds that have passed
             for note in self.notes:
+                if (note.y > (note.key.y - note.key.height) and note.key.pressed):
+                    note.set_pressed(True)
+                
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
                     # places the rendered object inside of the big rendered object over the entire window
@@ -173,7 +185,7 @@ init python:
                         key.set_pressed(pressed)
 
 screen jam():
-    default jam_game = JamDisplayable("weezer_lick")
+    default jam_game = JamDisplayable("the_lick")
 
     add jam_game
 
