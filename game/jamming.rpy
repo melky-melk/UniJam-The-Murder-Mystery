@@ -81,8 +81,12 @@ init python:
                 lines.append(line)
                 unique_notes.append(int(line[1]))
 
-            unique_notes.sort()
             unique_notes = list(set(unique_notes))
+            unique_notes.sort()
+
+            for note in line:
+                print(note)
+
             lines = sorted(lines, key=lambda x: x[1]) # sort by pitch
 
             # how many seconds it waits before the note_values spawn
@@ -106,6 +110,9 @@ init python:
                 self.notes.append(Note(key, note_number_to_name(int(line[1])), float(line[0]) + buffer_time, float(line[2])))
 
             self.notes = sorted(self.notes, key=lambda x: x.start_time)
+
+            for note in self.notes:
+                print(note)
             f.close()
 
         def __init__(self, song):
@@ -166,8 +173,9 @@ init python:
                 for key in self.keys:
                     if key.key_code == ev.key:
                         key.set_pressed(pressed)
+
 screen jam():
-    default jam_game = JamDisplayable("the_lick")
+    default jam_game = JamDisplayable("weezer_lick")
 
     add jam_game
 
