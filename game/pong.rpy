@@ -5,9 +5,7 @@ init python:
     class PongDisplayable(renpy.Displayable):
 
         def __init__(self):
-
             renpy.Displayable.__init__(self)
-
 
             # The sizes of some of the images.
             self.PADDLE_WIDTH = 12
@@ -17,7 +15,6 @@ init python:
             self.BALL_HEIGHT = 15
             self.COURT_TOP = 129
             self.COURT_BOTTOM = 650
-
 
             # Some displayables we use.
             self.paddle = Solid("#ffffff", xsize=self.PADDLE_WIDTH, ysize=self.PADDLE_HEIGHT)

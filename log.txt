@@ -1,22 +1,21 @@
-Wed Jul 26 22:38:38 2023
+Wed Aug  2 21:31:19 2023
 Windows-10-10.0.19045
 Ren'Py 8.1.1.23060707
  
 
-Bootstrap to the start of init.init. took 0.04s
+Bootstrap to the start of init.init. took 0.06s
 Early init. took 0.00s
-Loader init. took 0.03s
-Loading error handling. took 0.03s
-Loading script. took 0.19s
-Loading save slot metadata. took 0.04s
+Loader init. took 0.06s
+Loading error handling. took 0.05s
+Loading script. took 0.41s
+Loading save slot metadata. took 0.07s
 Loading persistent. took 0.00s
-Running init code. took 0.05s
+Running init code. took 0.12s
 Loading analysis data. took 0.02s
 Analyze and compile ATL. took 0.00s
-Reloading save slot metadata. took 0.03s
+Reloading save slot metadata. took 0.06s
 Index archives took 0.00s
-Backing up script files to 'C:\\Users\\chair\\AppData\\Roaming/RenPy/backups\\UniJam The Murder Mystery':
-Dump and make backups. took 0.06s
+Dump and make backups. took 0.09s
 Cleaning cache. took 0.00s
 Making clean stores. took 0.00s
 Initial gc. took 0.03s
@@ -25,17 +24,17 @@ nvdrs: Loaded, about to disable thread optimizations.
 nvdrs: b"Couldn't load nvlib." (can be ignored)
 Creating interface object. took 0.00s
 Cleaning stores took 0.00s
-Init translation took 0.05s
-Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.01s
-Save screen analysis took 0.02s
-Prepare screens took 0.06s
-Save pyanalysis. took 0.02s
-Save bytecode. took 0.03s
+Init translation took 0.07s
+Build styles took 0.01s
+Load screen analysis took 0.06s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
+Prepare screens took 0.11s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.04s
 Running _start took 0.00s
 Performance test:
-Interface start. took 0.11s
+Interface start. took 0.15s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 1920, 1080)
@@ -45,12 +44,193 @@ Vendor: "b'ATI Technologies Inc.'"
 Renderer: b'AMD Radeon(TM) Graphics'
 Version: b'4.6.14830 Compatibility Profile Context 21.10.02.03 27.20.21002.3000'
 Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1424, 801) drawable=(1424, 801)
+Screen sizes: virtual=(1920, 1080) physical=(1920, 986) drawable=(1920, 986)
 Maximum texture size: 4096x4096
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+removed :) A3 2 3.0
+[<store.Note object at 0x000000000555c040>, <store.Note object at 0x000000000555cfd0>, <store.Note object at 0x000000000555c1c0>, <store.Note object at 0x000000000555c5e0>, <store.Note object at 0x0000000004f5dd30>, <store.Note object at 0x0000000005541b20>]
+removed :) B3 3 3.25
+[<store.Note object at 0x000000000555cfd0>, <store.Note object at 0x000000000555c1c0>, <store.Note object at 0x000000000555c5e0>, <store.Note object at 0x0000000004f5dd30>, <store.Note object at 0x0000000005541b20>]
+removed :) C4 8 3.5
+[<store.Note object at 0x000000000555c1c0>, <store.Note object at 0x000000000555c5e0>, <store.Note object at 0x0000000004f5dd30>, <store.Note object at 0x0000000005541b20>]
+removed :) D4 9 3.75
+[<store.Note object at 0x000000000555c5e0>, <store.Note object at 0x0000000004f5dd30>, <store.Note object at 0x0000000005541b20>]
+removed :) B3 3 4.0
+[<store.Note object at 0x0000000004f5dd30>, <store.Note object at 0x0000000005541b20>]
+removed :) G3 1 4.5
+[<store.Note object at 0x0000000005541b20>]
+removed :) A3 2 4.75
+[]
+bro leave the game
 Cleaning stores took 0.00s
 Init translation took 0.00s
-Build styles took 0.00s
-Load screen analysis took 0.03s
+Build styles took 0.01s
+Load screen analysis took 0.07s
+Analyze screens took 0.00s
+Prepare screens took 0.00s
+Running _start took 0.00s
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+removed :) A3 2 3.0
+[<store.Note object at 0x0000000005597e80>, <store.Note object at 0x000000000539b0a0>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005597ee0>, <store.Note object at 0x00000000054135e0>, <store.Note object at 0x0000000005597fa0>]
+removed :) B3 3 3.25
+[<store.Note object at 0x000000000539b0a0>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005597ee0>, <store.Note object at 0x00000000054135e0>, <store.Note object at 0x0000000005597fa0>]
+removed :) C4 8 3.5
+[<store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005597ee0>, <store.Note object at 0x00000000054135e0>, <store.Note object at 0x0000000005597fa0>]
+removed :) D4 9 3.75
+[<store.Note object at 0x0000000005597ee0>, <store.Note object at 0x00000000054135e0>, <store.Note object at 0x0000000005597fa0>]
+removed :) B3 3 4.0
+[<store.Note object at 0x00000000054135e0>, <store.Note object at 0x0000000005597fa0>]
+removed :) G3 1 4.5
+[<store.Note object at 0x0000000005597fa0>]
+removed :) A3 2 4.75
+[]
+bro leave the game
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+removed :) A3 2 3.0
+[<store.Note object at 0x000000000546e6a0>, <store.Note object at 0x00000000053b96d0>, <store.Note object at 0x00000000053b9af0>, <store.Note object at 0x00000000053b9520>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005454a30>]
+removed :) B3 3 3.25
+[<store.Note object at 0x00000000053b96d0>, <store.Note object at 0x00000000053b9af0>, <store.Note object at 0x00000000053b9520>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005454a30>]
+removed :) C4 8 3.5
+[<store.Note object at 0x00000000053b9af0>, <store.Note object at 0x00000000053b9520>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005454a30>]
+removed :) D4 9 3.75
+[<store.Note object at 0x00000000053b9520>, <store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005454a30>]
+removed :) B3 3 4.0
+[<store.Note object at 0x0000000005487fd0>, <store.Note object at 0x0000000005454a30>]
+removed :) G3 1 4.5
+[<store.Note object at 0x0000000005454a30>]
+removed :) A3 2 4.75
+[]
+bro leave the game
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+removed :) A3 2 3.0
+[<store.Note object at 0x00000000054549d0>, <store.Note object at 0x00000000055564f0>, <store.Note object at 0x000000000546e130>, <store.Note object at 0x0000000005487160>, <store.Note object at 0x0000000005423220>, <store.Note object at 0x000000000539b0a0>]
+removed :) B3 3 3.25
+[<store.Note object at 0x00000000055564f0>, <store.Note object at 0x000000000546e130>, <store.Note object at 0x0000000005487160>, <store.Note object at 0x0000000005423220>, <store.Note object at 0x000000000539b0a0>]
+removed :) C4 8 3.5
+[<store.Note object at 0x000000000546e130>, <store.Note object at 0x0000000005487160>, <store.Note object at 0x0000000005423220>, <store.Note object at 0x000000000539b0a0>]
+removed :) D4 9 3.75
+[<store.Note object at 0x0000000005487160>, <store.Note object at 0x0000000005423220>, <store.Note object at 0x000000000539b0a0>]
+removed :) B3 3 4.0
+[<store.Note object at 0x0000000005423220>, <store.Note object at 0x000000000539b0a0>]
+removed :) G3 1 4.5
+[<store.Note object at 0x000000000539b0a0>]
+removed :) A3 2 4.75
+[]
+bro leave the game
+1.75
+57
+1.25
+50
+A3 2 3.0
+B3 3 3.25
+C4 8 3.5
+D4 9 3.75
+B3 3 4.0
+G3 1 4.5
+A3 2 4.75
+removed :) A3 2 3.0
+[<store.Note object at 0x000000000558bdf0>, <store.Note object at 0x0000000005392c40>, <store.Note object at 0x0000000005391f70>, <store.Note object at 0x0000000005454a30>, <store.Note object at 0x000000000557a4f0>, <store.Note object at 0x0000000005499940>]
+removed :) B3 3 3.25
+[<store.Note object at 0x0000000005392c40>, <store.Note object at 0x0000000005391f70>, <store.Note object at 0x0000000005454a30>, <store.Note object at 0x000000000557a4f0>, <store.Note object at 0x0000000005499940>]
+removed :) C4 8 3.5
+[<store.Note object at 0x0000000005391f70>, <store.Note object at 0x0000000005454a30>, <store.Note object at 0x000000000557a4f0>, <store.Note object at 0x0000000005499940>]
+removed :) D4 9 3.75
+[<store.Note object at 0x0000000005454a30>, <store.Note object at 0x000000000557a4f0>, <store.Note object at 0x0000000005499940>]
+removed :) B3 3 4.0
+[<store.Note object at 0x000000000557a4f0>, <store.Note object at 0x0000000005499940>]
+removed :) G3 1 4.5
+[<store.Note object at 0x0000000005499940>]
+removed :) A3 2 4.75
+[]
+bro leave the game
+Cleaning stores took 0.00s
+Init translation took 0.00s
+Build styles took 0.01s
+Load screen analysis took 0.07s
 Analyze screens took 0.00s
 Prepare screens took 0.00s
 Running _start took 0.00s

@@ -24,8 +24,9 @@ label start:
     scene bg cliff_bad
     show eunie neutral
 
-    play music "Pirouette_Among_the_Stars_WIP.mp3" fadein 0.75 # loop
-    play audio "night_ambiance.mp3" volume 0.1 fadein 0.75 # loop
+    # play music "Pirouette_Among_the_Stars_WIP.mp3" fadein 0.75 # loop
+    play music "music/opening_scene_1.mp3" fadein 0.75 # loop
+    play audio "sound effects/night_ambiance.mp3" volume 0.1 fadein 0.75 # loop
     "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
 
     "Jamie" "Jamming Society?"

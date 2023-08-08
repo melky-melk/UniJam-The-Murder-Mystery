@@ -16,28 +16,30 @@ init python:
         def __init__(self, key, note, start_time, duration):
             self.key = key 
             self.note = note
-            self.x = key.x
-            self.pressed = False
 
             # spawns in at the top of the screen
             self.width = key.width
             # the height i.e. how long the note should be held down
             self.start_time = float(start_time)
             self.height = int(key.height * duration)
+            
+            self.x = key.x
             self.y = 0 - self.height
+
+            self.non_pressed_image = Solid("#9b74e8", xsize=self.width, ysize=self.height)
+            self.pressed_image = Solid("#714a9e", xsize=self.width, ysize=self.height)
+            self.pressed = False
             
         def set_pressed(self, pressed):
             self.pressed = pressed
 
         def render(self, width, height, st, at):
-            colour = "#9b74e8"
+            image = self.non_pressed_image
 
             if self.pressed:
-                colour = "#6282f5"
+                image = self.pressed_image 
             
-            image = Solid(colour, xsize=self.width, ysize=self.height)
-            r = renpy.render(image, width, height, st, at)
-            return r
+            return renpy.render(image, width, height, st, at)
 
         def __str__(self):
             return self.note + " " + str(self.key.pitch) + " " + str(self.start_time)
@@ -53,23 +55,20 @@ init python:
             self.width = width
             self.height = height
             
+            self.non_pressed_image = Solid("#ffffff", xsize=self.width, ysize=self.height) 
+            self.pressed_image = Solid("#aea9b0", xsize=self.width, ysize=self.height)
             self.pressed = False
 
         def set_pressed(self, pressed):
             self.pressed = pressed
 
         def render(self, width, height, st, at):
-
+            image = self.non_pressed_image
+            
             if self.pressed:
-                # renpy.sound.play("pong_beep.opus", channel=0)
-                colour = "#aea9b0"
-                self.image = Solid(colour, xsize=self.width, ysize=self.height)
-            else:
-                colour = "#ffffff"
-                self.image = Solid(colour, xsize=self.width, ysize=self.height)
+                image = self.pressed_image
                 
-            r = renpy.render(self.image, width, height, st, at)
-            return r
+            return renpy.render(image, width, height, st, at)
 
     class JamDisplayable(renpy.Displayable):
 
@@ -125,6 +124,9 @@ init python:
         def __init__(self, song):
             renpy.Displayable.__init__(self)
 
+            self.score = 0
+            self.combo = 0
+
             self.HEIGHT = 800
             self.WIDTH = 1600
             self.SPEED = 1.5
@@ -132,6 +134,8 @@ init python:
             self.NOTE_WIDTH = 60
             self.NOTE_HEIGHT = 200
             self.NUM_OF_KEYS = 6
+
+            self.finished = False
 
             keyboard = ["1", "2", "3", "8", "9", "0"]
             keyboard_key_code = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_8, pygame.K_9, pygame.K_0]
@@ -148,23 +152,53 @@ init python:
             
             self.parsing_notes(song)
 
+        def render_score(score, combo, width, height, st, at):
+            score_string = " score " + str(self.score)
+            combo_string = " combo " + str(self.combo)
+            # check if the score or combo was incremented last time it got checked?
+            # if score or combo
+
+        # st meaning start time, is the number of seconds that have passed
         def render(self, width, height, st, at):
             r = renpy.Render(width, height)
+            # score_string = " score " + str(self.score)
+            # combo_string = " combo " + str(self.combo)
 
-            # st meaning start time, is the number of seconds that have passed
-            for note in self.notes:
-                if (note.y > (note.key.y - note.key.height) and note.key.pressed):
-                    note.set_pressed(True)
+            # text = renpy.render(Text(score_string + combo_string), width, height, st, at)
+            # r.blit(text, (width/2, height/2))
+
+            for i, note in enumerate(self.notes):
+                # when the note passes by the key, and the key is pressed then register a hit
+                if (note.y > (note.key.y - note.key.height)):
+                    if note.pressed == False and note.key.pressed:
+                        note.set_pressed(True)
+                        self.score += 1
+                # missed note
+                else:
+                    self.combo = 0
                 
+                # the actual spawning of the notes that spawn in when the note in the midi file starts
                 if (st >= note.start_time): 
                     render_object = note.render(width, height, st, at)
                     # places the rendered object inside of the big rendered object over the entire window
                     r.blit(render_object, (note.x, note.y))
                     note.y += self.SPEED
 
+                    # if the note's position is below the actual screen then remove the note from the list
+                    if (note.y >= height + note.height):
+                        self.notes.remove(note)
+                        print("removed :) " + note.__str__())
+                        print(self.notes)
+
             for key in self.keys:
                 render_object = key.render(width, height, st, at)
                 r.blit(render_object, (key.x, key.y))
+
+
+            # if all the notes have been played then end the game
+            if len(self.notes) == 0:
+                renpy.timeout(0)
+                self.finished = True
 
             # Ask that we be re-rendered ASAP, so we can show the next frame. refreshes the screen
             renpy.redraw(self, 0)
@@ -178,11 +212,17 @@ init python:
             elif pygame.KEYUP == ev.type:
                 pressed = False
             
-            # if it wasnt anything then ev.key would not exist
+            # if it wasnt keyup or down then ev.key would not exist
             if pressed != None:
                 for key in self.keys:
                     if key.key_code == ev.key:
                         key.set_pressed(pressed)
+
+            if self.finished:
+                print("bro leave the game")
+                return "True"
+
+            
 
 screen jam():
     default jam_game = JamDisplayable("the_lick")
@@ -205,9 +245,26 @@ label first_jam:
     show eunie neutral
     "Eunie" "Hey don't worry, you'll do great" 
     
+    "Jamie" "Lemme just practice a little bit first"
     hide eunie neutral
 
     call screen jam
 
     show eunie angry
     "Eunie" "bruh"
+    "Eunie" "Did you- did you really just play the lick"
+
+    "Jamie" "...maybe"
+    show eunie happy
+    "Eunie" "Ahhhh what am I going to do with you"
+    "Jamie" "You know you love it"
+
+    show eunie neutral
+    "Eunie" "Uh-huh sure."
+    "Eunie" "Okayyy well you seem ready enough"
+    extend "{size=*0.65}...unfortunately."
+    show eunie happy:
+        yoffset 0
+        easein 0.30 yoffset -75
+        easeout 0.25 yoffset 0
+    "Eunie" "So it's time you meet the gang!"

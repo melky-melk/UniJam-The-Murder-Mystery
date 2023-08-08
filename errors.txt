@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 72: expected 'image_name_component' not found.
-    hide scene bg cliff_bad
-        ^
+File "game/jamming.rpy", line 267: Line is indented, but the preceding show statement statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
+    yoffset 0
+    ^
 
 Ren'Py Version: Ren'Py 8.1.1.23060707
-Wed Jul 26 22:38:29 2023
+Wed Aug  2 21:13:29 2023

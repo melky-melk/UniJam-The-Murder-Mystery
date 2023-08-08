@@ -1,18 +1,31 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/script.rpy", line 29, in script
+  File "game/script.rpy", line 30, in script
+    "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
+  File "game/script.rpy", line 30, in script
     "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
   File "renpy/common/000window.rpy", line 114, in _window_auto_callback
     _window_show(auto=True)
   File "renpy/common/000window.rpy", line 69, in _window_show
     renpy.with_statement(trans)
-OSError: Couldn't find file 'night_ambiance.mp3'.
+OSError: Couldn't find file 'opening_scene_1.mp3'.
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 29, in script
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\bootstrap.py", line 275, in bootstrap
+    renpy.main.main()
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\main.py", line 670, in main
+    run(restart)
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\main.py", line 144, in run
+    renpy.execution.run_context(True)
+  File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\execution.py", line 953, in run_context
+    context.run()
+  File "game/script.rpy", line 30, in script
+    "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
+  File "/home/tom/ab/renpy-build/tmp/install.linux-x86_64/lib/python3.9/site-packages/future/utils/__init__.py", line 444, in raise_
+  File "game/script.rpy", line 30, in script
     "Eunie" "You didn't tell me you played before! You know... you should join the Jamming Society!"
   File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\ast.py", line 898, in execute
     statement_name(stmt_name)
@@ -43,9 +56,9 @@ Full traceback:
     rv = renpy.loader.load(fn, directory="audio")
   File "C:\LocalFiles\Fun stuff\Games\Video Games\renpy-8.1.1-sdk\renpy\loader.py", line 833, in load
     raise IOError("Couldn't find file '%s'." % name)
-OSError: Couldn't find file 'night_ambiance.mp3'.
+OSError: Couldn't find file 'opening_scene_1.mp3'.
 
 Windows-10-10.0.19045 AMD64
 Ren'Py 8.1.1.23060707
 UniJam: The Murder Mystery 1.0
-Wed Jul 26 15:24:14 2023
+Wed Aug  2 21:16:10 2023
